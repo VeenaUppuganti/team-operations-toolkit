@@ -2,22 +2,26 @@
 
 Team Operations Toolkit
 
-A shared collection of Claude skills, prompts, templates, and playbooks for Product, Engineering, and Program teams.
+## Why Compass?
 
-## Contents
+Compass provides reusable AI-powered skills, prompts, templates, and playbooks that help Product, Engineering, and Program teams plan, execute, and deliver effectively.
+
+## Skills
 
 - PI Planning
 - Capacity Planning
 - Release Notes
 - Backlog Grooming
-- Sprint Reviews
-- Retrospectives
+- Sprint Retrospectives
 - Roadmap Planning
-- Stakeholder Communications
+- Stakeholder Communication
 
-## Repository Structure
+## Templates
 
-- `skills/` - Claude skills by workflow
-- `templates/` - Reusable planning and delivery templates
-- `prompts/` - Role-specific prompts
-- `examples/` - Sample inputs and outputs
+- PI Planning Template
+- Release Notes Template
+- Sprint Review Template
+
+## Contributing
+
+Submit a PR with new skills, templates, or examples.
