@@ -1,0 +1,40 @@
+team:
+  name: SuperNova
+  manager: Veena Uppuganti
+  product_manager: Ned McCarthy
+  scrum_master: Veena Uppuganti/Ned McCarthy
+
+organization:
+  art: Customer Experience ART
+  business_area: TBD
+
+cadence:
+  sprint_length: 2 weeks
+  pi_sprints: 5
+  velocity_per_developer_per_sprint: 40
+  qa_capacity_per_sprint: 25
+  capacity_buffer_percent: 10
+
+members:
+  - name: Piyush 
+    role: Principal Architect
+    skills: Overall Architecture
+  - name: Tejinder
+    role: Architect
+    skills: Services, Integrations
+  - name: Lax
+    role: Staff Engineer
+    skills: React, Design Systems
+  - name: Jeff
+    role: Senior Staff Engineer
+    skills: PilotFish
+ -  name: Swapna
+    role: Staff QA Engineer
+    skills: E2E, Automation, QA
+
+
+working_agreements:
+  reserve_capacity_for_support: true
+  reserve_capacity_for_tech_debt: true
+  include_risks: true
+  include_dependencies: true
