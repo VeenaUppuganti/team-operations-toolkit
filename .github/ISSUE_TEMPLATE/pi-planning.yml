@@ -1,0 +1,144 @@
+name: PI Planning Generator
+description: Fill this form to generate a complete PI plan — objectives, story breakdown, capacity plan, dependencies, risks, and milestones.
+title: "[PI Planning] PI <version> — <Team Name>"
+labels: ["pi-planning"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## PI Planning Generator
+        Fill in the sections below. The bot will post a complete PI plan as a comment within a few minutes.
+        Fields marked * are required.
+
+  - type: input
+    id: pi_version
+    attributes:
+      label: "PI Version *"
+      description: "e.g. 27.2"
+      placeholder: "27.2"
+    validations:
+      required: true
+
+  - type: input
+    id: team_name
+    attributes:
+      label: "Team Name *"
+      placeholder: "SuperNova"
+    validations:
+      required: true
+
+  - type: input
+    id: art_name
+    attributes:
+      label: "ART Name"
+      placeholder: "Customer Experience ART"
+
+  - type: input
+    id: facilitator
+    attributes:
+      label: "Facilitator / PM *"
+      placeholder: "Dana Walsh"
+    validations:
+      required: true
+
+  - type: textarea
+    id: team_members
+    attributes:
+      label: "Team Members *"
+      description: "One per line: Name | Role | Specialisation"
+      placeholder: |
+        Alex | Full-stack Engineer | Tech Lead, APIs & UI
+        Jordan | Backend Engineer | Services, Messaging
+        Sam | QA Engineer | E2E, Automation
+        Chris | Backend Engineer | Integrations, APIs
+        Morgan | Data / Backend Engineer | Pipelines, Analytics
+        Riley | Backend / Infra Engineer | Infra, Security
+        Taylor | Backend / Infra Engineer | Infra, Platform
+        Priya | Frontend Engineer | React, Design Systems
+    validations:
+      required: true
+
+  - type: input
+    id: velocity
+    attributes:
+      label: "Velocity (pts / developer / sprint)"
+      placeholder: "40"
+      value: "40"
+
+  - type: input
+    id: qa_capacity
+    attributes:
+      label: "QA Capacity (pts / sprint)"
+      placeholder: "25"
+      value: "25"
+
+  - type: textarea
+    id: pi_dates
+    attributes:
+      label: "PI Sprint Dates *"
+      description: "One sprint per line: Sprint N | YYYY-MM-DD – YYYY-MM-DD"
+      placeholder: |
+        Sprint 1 | 2026-07-06 – 2026-07-17
+        Sprint 2 | 2026-07-20 – 2026-07-31
+        Sprint 3 | 2026-08-03 – 2026-08-14
+        Sprint 4 | 2026-08-17 – 2026-08-28
+        IP Sprint | 2026-09-01 – 2026-09-11
+    validations:
+      required: true
+
+  - type: textarea
+    id: pto
+    attributes:
+      label: "PTO & Availability"
+      description: "One per line: Name | days | Sprint N | dates (optional note)"
+      placeholder: |
+        Priya | 2 days | Sprint 2 | Jul 20–21
+        Alex | 2 days | Sprint 3 | Aug 5–6
+        Taylor | 5 days | Sprint 4 | Aug 17–21
+        All team | 1 day | Sprint 3 | All-Hands Aug 13
+
+  - type: textarea
+    id: objectives
+    attributes:
+      label: "Strategic Objectives *"
+      description: "One per line. Include the goal and measurable target."
+      placeholder: |
+        Customer Growth — Reduce onboarding time-to-value from 14 days to < 5 days
+        Platform Reliability — Achieve 99.9% uptime SLA via observability and alerting
+        AI-First Product — Increase user engagement 25% with ML-powered insights
+    validations:
+      required: true
+
+  - type: textarea
+    id: features
+    attributes:
+      label: "Features *"
+      description: |
+        One feature per block. Use this format:
+        F-N | Title | Priority (P1/P2/P3) | Category | ~Estimate pts | Description | Risks
+      placeholder: |
+        F-1 | Onboarding Wizard v2 | P1 | Customer | ~55 pts | Guided multi-step wizard with progress persistence and provisioning integration | Provisioning API must be stable first
+        F-2 | Real-time Alerting Engine | P1 | Enhancement | ~50 pts | Threshold-based alerts via email, Slack, webhook with dedup | Messaging Team API contract needed Sprint 1 W2
+        F-3 | AI-Powered Insights Dashboard | P2 | AI | ~60 pts | ML trend summaries on dashboard with user feedback loop | Hard dep on Orion ML Platform inference API
+        F-4 | Infrastructure Observability Stack | P2 | Infra | ~48 pts | Prometheus, Grafana, ELK, Alertmanager, PagerDuty | IO-5 depends on F-2 AE-2 staging
+        F-5 | API Rate Limiting & Security Hardening | P3 | Security | ~40 pts | Rate limiting, IP lists, OWASP CI scan, key rotation, audit logs | Pentest scope TBD Sprint 1 W2
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: "Dependencies"
+      description: "One per line: From story/feature | Needs from | Owning team | Needed by"
+      placeholder: |
+        F-3 AI-2 | Orion ML Platform inference API contract | Orion ML Platform Team | Sprint 1 Week 2
+        F-4 IO-5 | F-2 AE-2 deployed to staging | Internal / Jordan | Sprint 2 Week 2
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: "Additional Planning Notes"
+      description: "Any other context — constraints, stakeholder asks, capacity rules, etc."
+      placeholder: |
+        Reserve ~20% capacity per sprint for tech debt and reactive support.
+        ART escalation needed by Jul 10 to confirm Orion ML Platform commitment.

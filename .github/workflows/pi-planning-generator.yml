@@ -1,0 +1,84 @@
+name: PI Planning Generator
+
+on:
+  issues:
+    types: [opened, reopened]
+
+permissions:
+  issues: write
+  id-token: write   # required for AWS OIDC
+
+jobs:
+  generate:
+    if: contains(github.event.issue.labels.*.name, 'pi-planning')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: .
+
+      - name: Post "generating" comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: "⏳ **PI Planning Generator** — generating your plan now. This usually takes under 60 seconds..."
+            });
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Generate PI plan
+        id: generate
+        env:
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          BEDROCK_MODEL_ID: ${{ secrets.BEDROCK_MODEL_ID }}
+          ISSUE_BODY: ${{ github.event.issue.body }}
+          ISSUE_TITLE: ${{ github.event.issue.title }}
+        run: node scripts/generate-pi-plan.mjs
+
+      - name: Post plan as comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const output = fs.readFileSync('pi-plan-output.md', 'utf8');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: output
+            });
+
+      - name: Upload output artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pi-plan-${{ github.event.issue.number }}
+          path: pi-plan-output.md
+          retention-days: 90
+
+      - name: Add completed label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.addLabels({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              labels: ['pi-plan-generated']
+            });
