@@ -6,7 +6,7 @@ description: Use this skill when the user asks to generate release notes from sp
 # Release Notes From Jira
 
 ## Purpose
-Generate clear, customer-facing or internal release notes from specific Jira tickets.
+Generate clear, customer-facing or internal release notes from Jira tickets. Works with any Jira project.
 
 ## When to use
 Use this skill when the user provides:
@@ -18,44 +18,52 @@ Use this skill when the user provides:
 - A request like "generate release notes from these tickets"
 
 ## Workflow
-1. Identify the Jira tickets or filter criteria.
-   - If no version or tickets are specified, find the first unreleased version after the last release:
-     1. Query for the most recent released version:
-        ```
-        JQL: project = REAL AND fixVersion in releasedVersions() ORDER BY fixVersion DESC
-        ```
-        Note the version name (e.g. `RTLP 1.6.6`).
-     2. Query for the first unreleased version:
-        ```
-        JQL: project = REAL AND fixVersion in unreleasedVersions() ORDER BY fixVersion ASC
-        ```
-        Take the first result (e.g. `RTLP 1.6.7`).
-     3. Tell the user which version was found (last released + next unreleased) and confirm before proceeding.
-2. Use the Atlassian/Jira plugin if available to retrieve ticket details.
-3. For each ticket, inspect:
-   - Summary
-   - Description
-   - Acceptance criteria
-   - Comments if relevant
-   - Status
-   - Fix version
-   - Labels/components
-4. Exclude tickets that are not completed unless the user explicitly asks to include them.
-5. Group notes into useful sections:
-   - New Features
-   - Improvements
-   - Bug Fixes
-   - Technical / Internal Changes
-   - Known Issues, if any
-6. Rewrite Jira language into release-note language.
-7. Do not expose internal-only implementation details unless the user asks for internal release notes.
-8. Do not include any of the untagged tickets
-9. Do not publish these notes to a Confluence page
+
+### Step 1 — Gather context
+If the user has not already provided them, ask:
+1. **Jira project key** — e.g. `REAL`, `JAZZ`, `STAR` (check the URL of their Jira board if unsure)
+2. **Fix version or ticket list** — specific version name, or "auto-detect" to find the next unreleased version
+3. **Audience** — customer-facing (default) or internal?
+
+If the user says "auto-detect" or provides no version:
+1. Query for the most recent released version:
+   ```
+   JQL: project = <PROJECT_KEY> AND fixVersion in releasedVersions() ORDER BY fixVersion DESC
+   ```
+2. Query for the first unreleased version:
+   ```
+   JQL: project = <PROJECT_KEY> AND fixVersion in unreleasedVersions() ORDER BY fixVersion ASC
+   ```
+3. Tell the user: "Last released: `X`. Next unreleased: `Y`. Shall I generate notes for `Y`?" and wait for confirmation.
+
+### Step 2 — Fetch tickets
+Use the Atlassian Jira plugin with:
+```
+JQL: project = <PROJECT_KEY> AND fixVersion = "<version name>" ORDER BY issuetype ASC, key ASC
+```
+Fields to inspect per ticket:
+- Summary, Description, Acceptance criteria, Comments (if relevant)
+- Status, Fix version, Labels, Components, Issue type
+
+### Step 3 — Filter and group
+- Exclude tickets that are not completed unless the user explicitly asks to include them.
+- Group into sections:
+  - New Features
+  - Improvements
+  - Bug Fixes
+  - Technical / Internal Changes
+  - Known Issues (incomplete tickets worth flagging)
+
+### Step 4 — Write the notes
+- Rewrite Jira language into plain release-note language.
+- Do not expose internal implementation details unless the user asked for internal notes.
+- Do not include untagged/unrelated tickets.
+- Do not publish to Confluence unless explicitly asked.
 
 ## Output format
-Use this structure by default:
 
-# Release Notes
+```
+# Release Notes — <Version> (<Date>)
 
 ## New Features
 - ...
@@ -73,15 +81,16 @@ Use this structure by default:
 - ...
 
 ## Source Tickets
-- `ABC-123` - Short summary
-- `ABC-456` - Short summary
-- Release url (for example - https://stratadecision.atlassian.net/projects/REAL/versions/15348/tab/release-report-all-issues for monthly release)
+- `ABC-123` — Short summary
+- `ABC-456` — Short summary
+- Release URL: https://<site>.atlassian.net/projects/<PROJECT>/versions/<id>/tab/release-report-all-issues
+```
 
 ## Style rules
 - Be concise.
 - Write for product/business readers unless the user asks for technical notes.
-- Avoid Jira jargon such as "story", "sub-task", "spike", or "AC".
+- Avoid Jira jargon: no "story", "sub-task", "spike", "AC", "epic".
 - Convert developer wording into user-facing impact.
 - Use past tense for shipped work.
-- If ticket details are missing, say what information is missing.
+- If ticket details are missing, say what is missing.
 - Never invent release contents.
