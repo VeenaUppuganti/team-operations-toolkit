@@ -9,7 +9,7 @@ description: Use this skill when the user asks to create, set up, or regenerate 
 Generate a self-contained PI Planning Board HTML file for any team and any PI. The board is a single HTML file with capacity tracking, drag-and-drop sprint assignment, PTO, Jira sync, and Confluence collaboration built in.
 
 ## When to use
-- "Set up the board for PI 27.2"
+- "Set up the board for PI <Version>"
 - "Create a planning board for our team"
 - "Generate a new PI planning board"
 - "Our new PI starts next month, get the board ready"
