@@ -340,7 +340,40 @@ After generating the file:
    - "Open the HTML file in Chrome or Edge — it works fully offline."
    - "Use the **Export Shareable** button in the toolbar to snapshot and share the board."
    - "Use the **Jira Sync** panel in the board to map sprint IDs and push story assignments back to Jira."
-   - "If Confluence collaboration is set up, enter your Atlassian email and API token in the Collaboration panel."
+   - "The board supports **live collaboration** between two people (e.g. Engineering Manager and PM) — see the Collaboration panel in the toolbar."
+
+---
+
+### Step 7a — Live collaboration setup (EM + PM)
+
+The board has a built-in **Confluence Collaboration** panel that lets two people work on the same board simultaneously — for example, an Engineering Manager managing capacity/PTO and a PM moving stories between sprints.
+
+**How it works:**
+- Both people open the same HTML file (share it via OneDrive, email, or a shared folder)
+- Both open the **Collaboration** panel in the toolbar (cloud icon)
+- Each person enters:
+  - Their Atlassian email
+  - Their Atlassian API token (generate at `https://id.atlassian.com/manage-profile/security/api-tokens`)
+  - The **same** Confluence page ID (used as the shared sync store)
+  - Their display name (so the other person can see who made the last save)
+- Click **Start Live Sync**
+
+**What happens:**
+- The board pushes the full board state to the Confluence page as JSON
+- Both boards poll every 8 seconds — any change one person makes syncs to the other within ~10 seconds
+- Changes include: story sprint assignments, PTO values, allocations, story points
+
+**What does NOT sync** (these are baked into the HTML and are the same for both people):
+- Team member list and colors
+- Sprint dates and holiday counts
+- Jira ticket statuses (pulled live from Jira)
+
+**Prerequisites:**
+- A Confluence page must exist to act as the sync target — the page can be blank, the board will write to it
+- Both people need Atlassian accounts with access to that Confluence page
+- The Confluence page ID is the number in the page URL: `.../pages/5744820284`
+
+Ask the user: "Will two people be collaborating on this board (e.g. EM + PM)? If yes, provide the Confluence page ID and I'll include it in the generated board."
 
 ---
 
