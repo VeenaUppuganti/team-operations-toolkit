@@ -46,13 +46,11 @@ Suggest default colors: `#0d9488`, `#ea580c`, `#059669`, `#7c3aed`, `#2563eb`, `
 Save the profile as:
 ```json
 {
-  "teamName": "SuperNova",
+  "teamName": "<team name>",
   "members": [
-    {"id": "lax",      "name": "Lax",      "color": "#0d9488", "role": "Dev"},
-    {"id": "piyush",   "name": "Piyush",   "color": "#ea580c", "role": "Dev"},
-    {"id": "swapna",   "name": "Swapna",   "color": "#059669", "role": "QA"},
-    {"id": "tejinder", "name": "Tejinder", "color": "#7c3aed", "role": "Dev"},
-    {"id": "jeff",     "name": "Jeff",     "color": "#2563eb", "role": "Dev"}
+    {"id": "alice", "name": "Alice", "color": "#0d9488", "role": "Dev"},
+    {"id": "bob",   "name": "Bob",   "color": "#ea580c", "role": "QA"},
+    {"id": "carol", "name": "Carol", "color": "#2563eb", "role": "Dev"}
   ]
 }
 ```
@@ -71,7 +69,7 @@ Ask the user for:
 | PI start date | `2026-07-08` | First day of Sprint 1 |
 | Number of sprints | `7` | Default: 7 |
 | Sprint length (days) | `14` | Default: 14 |
-| Team / product name | `SuperNova` | Used in subtitle |
+| Team / product name | `Phoenix` | Used in subtitle |
 | Jira project key | `REAL` | e.g. REAL, JAZZ, STAR |
 | Jira board ID | `1575` | From the board URL: `/boards/1575` |
 | Atlassian cloud ID | `e2cebcc0-...` | From Atlassian admin or ask user |
@@ -126,8 +124,8 @@ For each team member, collect PTO days per sprint. Present as a table for clarit
 Enter PTO days for each team member (0 if none):
 
           Sp1  Sp2  Sp3  Sp4  Sp5  Sp6  Sp7
-Lax         0    0    0    0    0    7    8
-Piyush      0    0    2    2    2    2    2
+Alice       0    0    0    0    0    5    0
+Bob         0    2    2    0    0    0    0
 ...
 ```
 
@@ -136,11 +134,9 @@ Ask: "Enter PTO days as a comma-separated list for each person, one row at a tim
 Build the PTO object:
 ```javascript
 let pto = {
-  lax:      [0,0,0,0,0,7,8],
-  piyush:   [0,0,2,2,2,2,2],
-  swapna:   [0,0,1,1,1,1,1],
-  tejinder: [0,2,2,2,2,2,0],
-  jeff:     [0,0,0,0,0,0,0],
+  alice: [0,0,0,0,0,5,0],
+  bob:   [0,2,2,0,0,0,0],
+  carol: [0,0,0,0,0,0,0],
 };
 ```
 
@@ -309,8 +305,8 @@ SPRINTS lines example:
 
 TEAM lines example:
 ```
-  {id:'lax',    name:'Lax',    color:'#0d9488',role:'Dev'},
-  {id:'piyush', name:'Piyush', color:'#ea580c',role:'Dev'},
+  {id:'alice', name:'Alice', color:'#0d9488',role:'Dev'},
+  {id:'bob',   name:'Bob',   color:'#ea580c',role:'QA'},
 ```
 
 Allocations lines example:
